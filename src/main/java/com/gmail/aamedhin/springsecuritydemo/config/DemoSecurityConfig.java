@@ -25,7 +25,16 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 				.withUser(users.username("sunny").password("sunny").roles("ADMIN"));
 	}
 
-
-	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception { /*Configure Security of web paths in application, login, logout,etc*/
+		
+		http.authorizeRequests() /*restrict access based on the servlet request coming in*/
+			.anyRequest().authenticated() /*any request to the app must be authenticated*/
+			.and()
+			.formLogin() /*customizing the login process*/
+				.loginPage("/showDemoLoginPage") /*show the custom form "/showDemoLogin" for login*/
+				.loginProcessingUrl("/authenticateUser") /*Login form should POST data to this URL for processing, no controller request mapping required*/
+				.permitAll(); /*allow everyone to see the login page*/			
+	}	
 
 }
