@@ -8,7 +8,7 @@ public class LoginController {
 	
 	@GetMapping("/showDemoLoginPage")
 	public String showDemoLoginPage(){
-		return "demo-login";
+		return "demo-login-with-bootstrap";
 	}
 
 }
