@@ -10,5 +10,4 @@ public class LoginController {
 	public String showDemoLoginPage(){
 		return "demo-login-with-bootstrap";
 	}
-
 }
