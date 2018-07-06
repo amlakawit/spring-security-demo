@@ -1,5 +1,6 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
 
 
 <html>
@@ -8,24 +9,35 @@
 <title>Spring Security Demo</title>
 </head>
 <body>
-	User: <security:authentication property="principal.username"/>  Role(s): <security:authentication property="principal.authorities"/>
+	User:
+	<security:authentication property="principal.username" />
+	Role(s):
+	<security:authentication property="principal.authorities" />
 	<hr>
-	
-	<h3>Spring Security Demo</h3>	
-	
+
+	<h3>Spring Security Demo</h3>
+
 	<!-- add link to point to /leaders -->
-	<p> 
-		<a href="${pageContext.request.contextPath}/leaders">Leadership Meeting</a>
-	</p>
-	
+	<security:authorize access="hasRole('MANAGER')">
+		<p>
+			<a href="${pageContext.request.contextPath}/leaders">Leadership
+				Meeting</a>
+		</p>
+	</security:authorize>
+
 	<!-- add link to point to /systems -->
-	<p> 
-		<a href="${pageContext.request.contextPath}/systems">System Admin</a>
-	</p>
+	<security:authorize access="hasRole('ADMIN')">
+		<p>
+			<a href="${pageContext.request.contextPath}/systems">System Admin</a>
+		</p>
+	</security:authorize>
 	
-	
-	<form:form  action="${pageContext.request.contextPath}/logout"  method="POST">
-		<input type="submit" value="Logout"/>
+	<br><b></b>
+
+	<hr>
+	<form:form action="${pageContext.request.contextPath}/logout"
+		method="POST">
+		<input type="submit" value="Logout" />
 	</form:form>
 </body>
 </html>
