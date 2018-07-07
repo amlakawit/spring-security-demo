@@ -1,28 +1,41 @@
 package com.gmail.aamedhin.springsecuritydemo.config;
 
+import java.util.logging.Logger;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 
 @Configuration
 @EnableWebSecurity 
 public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	
+	@Autowired 
+	private DataSource securityDataSource;	
+	private Logger logger = Logger.getLogger(getClass().getName());
+	
 
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		//add users for in-memory authentication
+		logger.info("\n\n>>>>>JDBC Driver: " +  ((ComboPooledDataSource) securityDataSource).getDriverClass());
+		logger.info(">>>>connection url: " +  ((ComboPooledDataSource) securityDataSource).getJdbcUrl());
+		logger.info(">>>>>user: " +  ((ComboPooledDataSource) securityDataSource).getUser());
+		logger.info(">>>>>password: " +  ((ComboPooledDataSource) securityDataSource).getPassword());
+		logger.info("\n\n");
 		
-		UserBuilder users = User.withDefaultPasswordEncoder();
-		
-		auth.inMemoryAuthentication()
-				.withUser(users.username("ala").password("ala").roles("EMPLOYEE","MANAGER"))
-				.withUser(users.username("abebe").password("abebe").roles("EMPLOYEE"))
-				.withUser(users.username("sunny").password("sunny").roles("EMPLOYEE","ADMIN"));
+		auth.jdbcAuthentication().dataSource(securityDataSource); 
+	
 	}
 
 	@Override
